@@ -1,0 +1,22 @@
+
+   <ion-content scroll="true">
+<div class="list">
+<br>
+<P ALIGN=center> <img src="img/MexicoLogo.jpg" width="200" height="100" /> </P> <br> <br> 
+
+  <label class="item item-input">
+    <span class="input-label">Username</span>
+      <input type="text" ng-model="login.username" ng-minlength="3">
+  </label>
+  <label class="item item-input">
+    <span class="input-label">Password</span>
+      <input type="password" ng-model="login.password" ng-minlength="3">
+  </label>
+  <div class="padding">
+<br> <br> <br> <br> 
+    <button ng-click="login()" ng-disabled="!login.username || !login.password" class="button button-block button-positive">Acceder</button>
+    <button ui-sref="registro" class="button button-block button-positive">Registrarse</button>
+  </div>
+</div>
+</ion-content>
+
