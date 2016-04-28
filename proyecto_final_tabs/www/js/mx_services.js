@@ -74,7 +74,18 @@ angular.module('starter.services', [])
                 }
             });
         }
-};
+    };
     
-});
+})
+
+.factory('DataShare', function() {
+    var data = {};
+    data.coordenate = {};
+    data.user = {};
+    
+    return {
+        coordenate: data.coordenate,
+        user: data.user
+    }
+})
 
