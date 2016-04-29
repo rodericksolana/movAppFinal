@@ -74,9 +74,11 @@ angular.module('starter.controllers', ['ngCordova'])
 
 
     $scope.login = function () {
+        // DataShare.user = {id: 1, username: 'Tatum', perfil: 'user'};
+        // $state.go('tab.home');
         servicioApp.login($scope.login).then(function (data) {
-		if (data.data == 1) {
-            DataShare.asdf+*
+		if (data.data.respCode == 1) {
+            DataShare.user = data.data.result[0];
             $state.go('tab.home');
         } else {
             $ionicPopup.alert({
@@ -134,7 +136,8 @@ angular.module('starter.controllers', ['ngCordova'])
 })
 
 .controller('CameraCtrl', function($scope, $stateParams, $http, $ionicModal,
-            $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare) {
+            $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
+            servicioApp) {
                 
     $scope.model = {};
     $scope.model.image = '';
@@ -188,7 +191,7 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.savePic = function() {
         var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
             "final/.Proyecto/Servicios/file_upload.php";
-        var filename = Date.now().toString() + ".jpg";
+        var filename = "u" + DataShare.user.id + "-" + Date.now().toString() + ".jpg";
           
         var options_up = {
               fileKey: "file",
@@ -197,20 +200,20 @@ angular.module('starter.controllers', ['ngCordova'])
               mimeType: "image/jpg",
               params : {'directory':'upload', 'fileName':filename}
           };
-        $cordovaFileTransfer.upload(server_url, $scope.autosData.image, options_up).then(function(result) {
+        $cordovaFileTransfer.upload(server_url, $scope.model.image, options_up).then(function(result) {
             console.log("SUCCESS: " + JSON.stringify(result.response));
             if (result.response !== "File successfully uploaded!") {
                 alert("Hubo un error al subir la imagen.");
                 return false;
             } 
             
-            var img_path = "http://ubiquitous.csf.itesm.mx/~pddm-1182791/content/parcial2/servicios/upload/" + filename;
-            AutoService.insert({"marca": $scope.autosData.marca,
-                                "modelo": $scope.autosData.modelo,
-                                "anio": $scope.autosData.year,
-                                "vendido": 0, // no está vendido aún
-                                "img": img_path,
-                                "precio": $scope.autosData.precio}).then(
+            var img_path = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + filename;
+            servicioApp.imgInsert({"idPersona": DataShare.user.id,
+                                "ubicacion": DataShare.coordenate.latitude + "," + 
+                                             DataShare.coordenate.longitude,
+                                "descripcion": $scope.model.description,
+                                "tipo": 'foto', // no está vendido aún
+                                "ruta": img_path}).then(
             function(resp) {
                 alert("Datos guardados exitosamente.");
                 $state.go('app.main');

@@ -1,25 +1,46 @@
-<!doctype html>
-   <html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
 
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-      <head>
-	<meta http-equiv="refresh" content="2;URL=index2.html">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-	*   {
-            margin-top: 0px; margin-bottom: 0px; margin-left: 0px;
-            margin-right: 0px; padding: 0; color: black; font-size: 10pt;
-            background-color: #FFFFFF;
-        }
-	img {
-              width: 100%;
-              height: auto;
-        }
-      </style>
-      </head>
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
 
-      <body>
-	<img src="img/MexicoLogo.jpg" width="1000" height="1000" />  
-      </body>
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-      </html>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+    <script src="js/ng-cordova.min.js"></script>
+    
+    <!-- your app's js -->
+    <script src="js/mx_app.js"></script>
+    <script src="js/mx_controllers.js"></script>
+    <script src="js/mx_services.js"></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQuZxPziKUw4lne2vb_m7KtIgvb1zVFIo&sensor=true&libraries=geometry">
+    </script>
+  </head>
+  <body ng-app="starter">
+    <!--
+      The nav bar that will be updated as we navigate between views.
+    -->
+    <ion-nav-bar class="bar-stable">
+        <ion-nav-back-button class="button-clear">
+            <i class="ion-arrow-left-c"></i> Atrás
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <!--
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view></ion-nav-view>
+  </body>
+</html>

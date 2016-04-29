@@ -62,17 +62,27 @@ angular.module('starter.services', [])
 
 .factory('servicioApp', function($http) {
     var baseUrl = 'http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/';
+    var baseUrl2 = 'http://ubiquitous.csf.itesm.mx/~pddm-1182791/content/final/pf/service/';
+    
     return {
         login: function(login) {
             return $http.get(baseUrl+'login.php?Usuario='+login.username+'&Pw='+login.password);
         },
 
-	registra: function(datosPersona){
+        registra: function(datosPersona){
             return $http.post(baseUrl+'registro.php',datosPersona,{
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                 }
             });
+        },
+        
+        imgInsert: function(json) {
+            return $http.post(baseUrl2 + 'img_insert.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
         }
     };
     

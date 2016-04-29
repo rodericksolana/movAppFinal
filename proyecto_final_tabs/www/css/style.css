@@ -8,3 +8,16 @@
     
     
 }
+
+.textAreaDescrip {
+    background-image:url(images/form_bg.jpg);
+	background-repeat:repeat-x;
+	border:2px dashed #D1C7AC;
+	width: 100%;
+	height: auto;
+	color:#333333;
+	padding:3px;
+	margin-right:4px;
+	margin-bottom:8px;
+	font-family:tahoma, arial, sans-serif;
+}
