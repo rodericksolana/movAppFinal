@@ -1,0 +1,25 @@
+media (id, rutaMedia, descripcion, hashtag, idComentario, ubicacion, Idvoto, idPersonas, idCategoria, tipo);
+
+create table Media (id int unsigned auto_increment primary key, foreign key (idComentario) references Comentario(idComent),
+                    foreign key (idVoto) references Votos(idVoto), foreign key (idPersona) references Personas(Personas),
+                    foreign key (idCategoria) references Categoria(idCat), descripcion varchar(150), hashtag varchar(150), 
+                    ubicacion varchar(300), tipo enum('video', 'foto'), ruta varchar(500) );
+                    
+                    
+create table Media (id int unsigned auto_increment not null primary key, idComentario int(11), idVoto int(11), idPersona int(11) not null,
+idCategoria int(11), descripcion varchar(150) default "", hashtag varchar(150), 
+ubicacion varchar(300), tipo enum('video', 'foto') not null, ruta varchar(500) not null,
+foreign key (idComentario) references Comentario(idComent),
+foreign key (idVoto) references Votos(idVoto),
+foreign key (idPersona) references Personas(Personas),
+foreign key (idCategoria) references Categoria(idCat)
+);
+
+insert into Media (idPersona, descripcion, ubicacion, tipo, ruta) values (1, "lelo lelo", "", "foto", "\ruta\asf");
+
+
+create table Personas (idPersonas INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+Usuario varchar(20), Pw varchar(20), Interes varchar (150), imagen varchar(200),
+perfil enum('user', 'admin') default 'user');
+
+INSERT INTO `Personas` (`Usuario`,`Pw`,`Interes`) VALUES ("Tatum","7777","Pareja"),("Karly","0000","Casado"),("Lacy","5555","Soltero"),("Colton","user","Divorciado"),("Brenden","1234","Pareja"),("Yuri","4444","Viudo"),("Raphael","4444","Casado"),("Acton","6666","Viudo"),("Samuel","4444","Casado"),("Chancellor","3333","Pareja");
