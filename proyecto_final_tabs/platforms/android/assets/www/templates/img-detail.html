@@ -1,0 +1,51 @@
+<ion-view view-title="México Lindo">
+  <ion-content class="padding">
+    <div class="row">
+        <div class="item-avatar" href="#">
+          <img src="/img/adam.jpg">
+          <h4>Venkman</h4>
+          <p>Ubicación</p>
+        </div>
+    </div>
+    <div class="row">
+        <img src="/img/adam.jpg" width="100%" height="420px;">
+    </div>
+    <div class="row">
+        <div class="col col-10">
+            <a class="button button-icon icon ion-ios-heart-outline"></a>
+        </div>
+        <div class="col col-10">
+            <a class="button button-icon icon ion-ios-chatbubble-outline" 
+            ng-click="showComment()"></a>
+        </div>
+        <div class="col col-10">
+            <a class="button button-icon icon ion-ios-flag-outline"></a>
+        </div>
+    </div>
+    <hr> <!-- linea horizantal -->
+    
+    <!-- area de comentario -->
+    <div class="item item-icon-right" ng-show="model.showComment">
+        <input type="text" id="imgDetailComment" class="comment_input padding" placeholder="Comentar" 
+        size="35" maxlength="102" ng-model="model.comment" ng-blur="model.showComment = false">
+        <a class="icon ion-chatbubble-working"></a>
+    </div>
+    <!-- lista de comentarios -->
+    <div class="list">
+        <div class="item item-avatar item-text-wrap">
+          <img src="/img/ben.png">
+          <a>Venkman</a>
+          <h3>Back off, man. I'm a scientist. Back off, man. I'm a scientist.I'm a scientist. Back off, man. I'm aaa</h3>
+          <p>Fecha</p>
+        </div>
+        <div class="item item-avatar item-text-wrap">
+          <img src="/img/max.png">
+          <a>Max</a>
+          <h3>Lelo lelo</h3>
+          <p>Fecha</p>
+        </div>
+    </div>
+    
+  </ion-content>
+</ion-view>
+
