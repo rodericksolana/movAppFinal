@@ -1,0 +1,23 @@
+/* Empty. Add your own CSS if you like */
+.comment_input {
+    background: rgba(255,255,255,0.5);
+    margin: 0 0 10px 0;
+    box-shadow: 
+      inset 0 0 8px  #11c1f3,
+            0 0 16px rgba(0,0,0,0.1); 
+    
+    
+}
+
+.textAreaDescrip {
+    background-image:url(images/form_bg.jpg);
+	background-repeat:repeat-x;
+	border:2px dashed #D1C7AC;
+	width: 100%;
+	height: auto;
+	color:#333333;
+	padding:3px;
+	margin-right:4px;
+	margin-bottom:8px;
+	font-family:tahoma, arial, sans-serif;
+}

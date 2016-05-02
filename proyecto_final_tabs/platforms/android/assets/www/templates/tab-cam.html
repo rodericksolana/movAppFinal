@@ -1,0 +1,56 @@
+<script id="templates/mapa_modal.html" type="text/ng-template">
+  <div class="modal" style="height: 100%;">
+        <header class="bar bar-header bar-stable">
+            <h1 class="title">MAPA</h1>
+            <div class="button button-clear" ng-click="modal.remove()"><span class="icon ion-close"></span></div>
+        </header>
+        
+            <pddm-mapa scroll="false" data-tap-disabled="true"  geolocalizado="model.geolocalizado" 
+            style="width: 100%;height: 70%;display: block;" class="padding"></pddm-mapa>
+            
+           <div class="row">
+            <button class="button button-full button-stable" ng-click="saveLocation()">Seleccionar ubicación</button>
+          </div>
+        
+      </div>
+</script>
+
+<ion-view view-title="México Lindo">
+  <ion-content>
+    <button class="button button-block button-stable" ng-click="loadImages()">
+        Subir Foto
+    </button>
+    <button class="button button-block button-stable">
+        Tomar Foto
+    </button>
+    
+    <div>
+    
+    <div class="row">
+        <img ng-src="{{model.image}}" class="padding" 
+         style="width:100%; height: auto;">
+    </div>
+    
+    <div class="row">
+        <div class="col">
+        <textarea class="textAreaDescrip" ng-model="model.description" class="padding" 
+        placeholder="Descripcion (150 carácteres max.)" maxlength="150"></textarea>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col">
+            <button class="button button-block button-stable" ng-click="Geolocalizar()">
+                Ubicación
+            </button>
+        </div>
+        <div class="col">
+            <button class="button button-block button-stable" ng-click="savePic()">
+                Guardar
+            </button>
+        </div>
+    </div>
+    
+    </div>
+</ion-content>
+</ion-view>
