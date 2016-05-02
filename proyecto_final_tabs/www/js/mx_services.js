@@ -83,6 +83,10 @@ angular.module('starter.services', [])
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                 }
             })
+        }, 
+
+	getId: function(personaId){
+            return $http.get(baseUrl+'select_id.php?id='+personaId); 
         }
     };
     

@@ -1,9 +1,14 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-  </ion-content>
-</ion-view>
+<ion-view view-title="Cuenta">
+<ion-content class="padding" ng-repeat="datosPersona in datosPersona">
+<P ALIGN=center > <img ng-src="{{datosPersona.imagen}}" style="width: 120px; height: 120px"> </P>
+<h3 align="center"><u>Información</u></h3>
+    <p>
+        <font size="2" color="gray" >Usuario : {{datosPersona.Usuario}}</font>
+    <br>
+        <font size="2" color="gray" > Intereses : {{datosPersona.Interes}}</font>
+    <br>
+	
+    </p>
+<button  ng-model="prueba" ng-click="prueba()"  class="button button-block button-positive" >Prueba</button>
+    
+  </ion-view>

@@ -43,11 +43,8 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
-    $scope.settings = {
-    enableFriends: true
-    };
-})
+
+
 
 .controller('ImgDetailCtrl', function($scope, $stateParams) {
     $scope.showComment = function() {
@@ -62,10 +59,12 @@ angular.module('starter.controllers', ['ngCordova'])
 })
 
 
+
 .controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, DataShare, $cordovaCamera, $cordovaFileTransfer) {
 
 var imageURL;
 
+/*Funcion para poner alertas con mensajes en pantalla*/
  $scope.showAlert = function(msg) {
       $ionicPopup.alert({
           title: msg.title,
@@ -75,7 +74,7 @@ var imageURL;
       });
     };
 
-
+/*Funcion para logear*/
     $scope.login = function () {
         // DataShare.user = {id: 1, username: 'Tatum', perfil: 'user'};
         // $state.go('tab.home');
@@ -94,14 +93,12 @@ var imageURL;
         });
     };
 
-	$scope.datosPersona={};
+	$scope.datosPersona={}; //arreglo para los datos de las personas
 
-
+/*Funcion para registrar y subir la foto al servidor*/
     $scope.registra = function ()  {
 
 $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + $scope.datosPersona.username + "-" + $scope.datosPersona.password +".jpg";
-
-
 
 
 /*Comienza la parte para registrar al usuario*/
@@ -114,36 +111,13 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
                 }).success(function(data){
 		 if(data == 1)
         {
-
-
-/*Aqui empieza la parte para subir la foto al servidor despues de que se registro el usuario*/
-
-
-            $state.go('login');
+	     $state.go('login');
              $scope.showAlert({
                         title: "Info",
                         message: "Datos guardados - Inicia Sesión"
                     });
-		
-        }//cierre de if
-            
-    else
-    {
-            $ionicPopup.alert({
-                title: data,
-                        template: "Intenta con otra combinación",
-                        okText: 'Ok',
-                        okType: 'button-positive'
-                    });
-    }//Cierre de else
 
-                });
-
-if($scope.datosPersona.username && $scope.datosPersona.password)
-{
-
-//alert("Foto");
-var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
+	var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
             "final/.Proyecto/Servicios/file_upload.php";
         var filename = $scope.datosPersona.username + "-" +$scope.datosPersona.password +".jpg" ;
           
@@ -157,7 +131,7 @@ var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
  
         $cordovaFileTransfer.upload(server_url, imageURL, options_up).then(function(result) {
             console.log("SUCCESS: " + JSON.stringify(result.response));
- alert("Antes de If Guardo");
+
             if (result.response !== "File successfully uploaded!") {
                 alert("Hubo un error al subir la imagen.");
                 return false;
@@ -169,20 +143,26 @@ var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
         }, function(err) {
             console.log("ERROR: " + JSON.stringify(err));
             alert("It was an error uploading the file");
-        }, function (progress) {
-            // constant progress updates
         });
 
+    }//cierre de if
+            
+    else
+    {
+            $ionicPopup.alert({
+                title: data,
+                        template: "Intenta con otra combinación",
+                        okText: 'Ok',
+                        okType: 'button-positive'
+                    });
+    }//Cierre de else
 
-}
-
-
-
+                });
 
         //document.write('<div>Funcion registra</div>'); //esto saca una ventana en blanco con el texto adentro
 
        };
-
+/*Funcion para tomar una foto*/
 	  $scope.pic = function() {
         var options = { 
             quality : 75, 
@@ -191,8 +171,8 @@ var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
             sourceType : Camera.PictureSourceType.CAMERA, 
             allowEdit : true,
             encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 300,
-            targetHeight: 300,
+            targetWidth: 500,
+            targetHeight: 500,
             popoverOptions: CameraPopoverOptions,
             saveToPhotoAlbum: false
         };
@@ -210,40 +190,33 @@ var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
         });
     }//Cierre de funcion pic
 	
-	$scope.savePic = function() {
+	
+})//termina controlador login
 
 
-        var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
-            "final/.Proyecto/Servicios/file_upload.php";
-        var filename = $scope.datosPersona.username + "-" +$scope.datosPersona.password +".jpg" ;
-          
-        var options_up = {
-              fileKey: "file",
-              fileName: filename,
-              chunkedMode: false,
-              mimeType: "image/jpg",
-              params : {'directory':'upload', 'fileName':filename}
-          };
- 
-        $cordovaFileTransfer.upload(server_url, imageURL, options_up).then(function(result) {
-            console.log("SUCCESS: " + JSON.stringify(result.response));
- 
-            if (result.response !== "File successfully uploaded!") {
-                alert("Hubo un error al subir la imagen.");
-                return false;
-            } 
 
-		$state.go('login');
-            
-            //var img_path = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + filename;
-     
-            
+.controller('AccountCtrl', function($scope, $stateParams, $http, $ionicModal,
+            $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
+            servicioApp) {
+
+ $scope.showDataId = function() {
+      servicioApp.getId(DataShare.user.id).success(function(datosPersona) {
+            $scope.datosPersona = datosPersona;
         });
+        
+    };
+
+    $scope.showDataId();
+
+	
 
 
-}//Cierre de función savePic
 
-})
+})//Cierre controlador Cuenta
+
+
+
+
 
 
 .controller('AppCtrl', function ($scope, $state)  {
