@@ -132,7 +132,7 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
         $cordovaFileTransfer.upload(server_url, imageURL, options_up).then(function(result) {
             console.log("SUCCESS: " + JSON.stringify(result.response));
 
-            if (result.response !== "File successfully uploaded!") {
+            if (result.response.trim() !== "File successfully uploaded!") {
                 alert("Hubo un error al subir la imagen.");
                 return false;
             } 
@@ -169,10 +169,10 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
             //destinationType : Camera.DestinationType.DATA_URL, 
 	    destinationType : Camera.DestinationType.FILE_URL,
             sourceType : Camera.PictureSourceType.CAMERA, 
-            allowEdit : true,
+            allowEdit : false,
             encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 500,
-            targetHeight: 500,
+            targetWidth: 640,
+            targetHeight: 640,
             popoverOptions: CameraPopoverOptions,
             saveToPhotoAlbum: false
         };
@@ -295,7 +295,7 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
           };
         $cordovaFileTransfer.upload(server_url, $scope.model.image, options_up).then(function(result) {
             console.log("SUCCESS: " + JSON.stringify(result.response));
-            if (result.response !== "File successfully uploaded!") {
+            if (result.response.trim() !== "File successfully uploaded!") {
                 alert("Hubo un error al subir la imagen.");
                 return false;
             } 
