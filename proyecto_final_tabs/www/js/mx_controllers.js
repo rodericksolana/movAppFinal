@@ -198,17 +198,23 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
 .controller('AccountCtrl', function($scope, $stateParams, $http, $ionicModal,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
             servicioApp) {
-
+/*
  $scope.showDataId = function() {
       servicioApp.getId(DataShare.user.id).success(function(datosPersona) {
             $scope.datosPersona = datosPersona;
         });
         
     };
+*/
 
-    $scope.showDataId();
+   // $scope.showDataId();
 
+$scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.user.intereses,"imagen":DataShare.user.imagen,"perfil":DataShare.user.perfil}];
 	
+
+/* Esto es lo q regresa el login y lo q pasa a ser DataShare.user.ELEMENTO
+{"respCode":1,"result":[{"id":"14","username":"Rod","perfil":"user","intereses":"Beber y beber","imagen":"http:\/\/ubiquitous.csf.itesm.mx\/~pddm-1129839\/content\/final\/.Proyecto\/Servicios\/upload\/Rod-123.jpg"}]}
+*/
 
 
 
