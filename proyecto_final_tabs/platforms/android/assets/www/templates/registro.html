@@ -9,22 +9,22 @@
 
   <label class="item item-input">
     <span class="input-label">Username</span>
-      <input type="text" ng-model="datosPersona.username" ng-minlength="3" maxlength="30">
+      <input type="text" ng-model="datosPersona.username" ng-minlength="3" maxlength="30" placeholder="min. 3 characters">
   </label>
   <label class="item item-input">
     <span class="input-label">Password</span>
-      <input type="password" ng-model="datosPersona.password" ng-minlength="3" maxlength="15">
+      <input type="password" ng-model="datosPersona.password" ng-minlength="3" maxlength="15" placeholder="min. 3 characters">
   </label>
  <label class="item item-input">
     <span class="input-label">Perfil</span>
-     <textarea ng-model="datosPersona.Interes" maxlength="150">  </textarea>
+     <textarea ng-model="datosPersona.Interes" maxlength="150" placeholder="max. 150 characters">  </textarea>
 
   </label>
 
 
 
 <br>
-
+<div class="padding">
     <button  ng-model="picBoton" ng-click="picBoton=true; pic()"  class="button button-block button-positive" >Take Picture</button>
 <!--
  <div class="col">
@@ -35,7 +35,6 @@
 -->
 
 
-  <div class="padding">
 <br> <br> 
     <button ng-click="registra()" ng-disabled="!picBoton" class="button button-block button-positive">Registrarse</button>
   </div>

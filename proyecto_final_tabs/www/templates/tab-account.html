@@ -1,5 +1,10 @@
 <ion-view view-title="Cuenta">
 <ion-content class="padding" ng-repeat="datosPersona in datosPersona">
+ <ion-refresher
+            pulling-text="Arrastre para actualizar..."
+            on-refresh="showDataIdMedia()">
+          </ion-refresher>
+
 <P ALIGN=center > <img ng-src="{{datosPersona.imagen}}" style="width: 120px; height: 120px"> </P>
 <h3 align="center"><u>Información</u></h3>
     <p>
@@ -9,7 +14,37 @@
     <br>
 	 <font size="2" color="gray" > Tipo de Perfil : {{datosPersona.perfil}}</font>
     <br>
-    </p>
-<button  ng-model="prueba" ng-click="prueba()"  class="button button-block button-positive" >Prueba</button>
     
+</p>
+<div class="row" ng-repeat="datosMedias in datosMedia" ng-if="$index % 3 === 0">
+<div class="col col-33" ng-if="$index < datosMedia.length"  ui-sref="tab.account-detail({accountId: {{datosMedia[$index].id}}})">
+            <img ng-src="{{datosMedia[$index].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 1 < datosMedia.length"  ui-sref="tab.account-detail({accountId: {{datosMedia[$index+1].id}}})">
+            <img ng-src="{{datosMedia[$index + 1].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 2 < datosMedia.length"   ui-sref="tab.account-detail({accountId: {{datosMedia[$index+2].id}}})">
+            <img ng-src="{{datosMedia[$index + 2].ruta}}" width="100%" />
+        </div>
+    
+</div>
+
+<!--
+<ion-item class="row" ng-repeat="datosMedia in datosMedia" type="item-text-wrap">
+                <img ng-src="{{datosMedia.ruta}}">
+                <i class="icon ion-ios7-arrow-right"></i>
+                
+ <i class="icon ion-chevron-right icon-accessory"></i>
+					   <ion-option-button class="button-assertive" ng-click="delete(datosalumno);">
+          Delete
+        </ion-option-button>
+                <!-- <ion-delete-button class="ion-minus-circled" ng-click="delete(datosalumno);"> </ion-delete-button>  
+
+</ion-item>
+
+-->
+
+
+</ion-content>
+
   </ion-view>

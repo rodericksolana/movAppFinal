@@ -198,16 +198,19 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
 .controller('AccountCtrl', function($scope, $stateParams, $http, $ionicModal,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
             servicioApp) {
-/*
- $scope.showDataId = function() {
-      servicioApp.getId(DataShare.user.id).success(function(datosPersona) {
-            $scope.datosPersona = datosPersona;
+
+
+ $scope.showDataIdMedia = function() {
+      servicioApp.getIdMedia(DataShare.user.id).success(function(datosMedia) {
+            $scope.datosMedia = datosMedia;
+        }).finally(function() {
+            $scope.$broadcast('scroll.refreshComplete');
         });
         
     };
-*/
 
-   // $scope.showDataId();
+
+    $scope.showDataIdMedia();
 
 $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.user.intereses,"imagen":DataShare.user.imagen,"perfil":DataShare.user.perfil}];
 	
@@ -219,6 +222,26 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 
 
 })//Cierre controlador Cuenta
+
+
+
+.controller('AccountDetailCtrl', function($scope,$stateParams,$ionicPopup,$ionicModal,$state,servicioApp, DataShare, $cordovaFileTransfer ){
+        
+  
+ $scope.showDataMedia = function() {
+      servicioApp.getMedia($stateParams.accountId).success(function(datosMedia) {
+            $scope.datosMedia = datosMedia;
+        });
+        
+    };
+       
+    $scope.showDataMedia();
+    
+
+
+   	
+	
+})
 
 
 

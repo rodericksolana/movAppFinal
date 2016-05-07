@@ -85,8 +85,12 @@ angular.module('starter.services', [])
             })
         }, 
 
-	getId: function(personaId){
-            return $http.get(baseUrl+'select_id.php?id='+personaId); 
+	getIdMedia: function(personaId){
+            return $http.get(baseUrl+'select_id_media.php?id='+personaId); 
+        },
+	
+	getMedia: function(Id){
+            return $http.get(baseUrl+'select_media.php?id='+Id); 
         }
     };
     
@@ -100,6 +104,8 @@ angular.module('starter.services', [])
     return {
         coordenate: data.coordenate,
         user: data.user
+   	
+	
     }
 })
 
