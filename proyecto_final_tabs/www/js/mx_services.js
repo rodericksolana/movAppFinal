@@ -91,6 +91,10 @@ angular.module('starter.services', [])
 	
 	getMedia: function(Id){
             return $http.get(baseUrl+'select_media.php?id='+Id); 
+        },
+   
+	getMediaMain: function(){
+            return $http.get(baseUrl+'select_media_main.php'); 
         }
     };
     

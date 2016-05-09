@@ -1,27 +1,21 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('HomeCtrl', function($scope) {
-     $scope.images = [];
- 
-    $scope.loadImages = function() {
-        // for(var i = 0; i < 11; i++) {
-            // $scope.images.push({id: i, src: "http://placehold.it/50x50"});
-        // }
-        $scope.images.push({id: 1, src: "http://placehold.it/50x50"});
-        $scope.images.push({id: 0, src: "img/adam.jpg"});
-        $scope.images.push({id: 2, src: "img/ben.png"});
-        $scope.images.push({id: 3, src: "img/ionic.png"});
-        $scope.images.push({id: 4, src: "img/max.png"});
-        $scope.images.push({id: 5, src: "img/mike.png"});
-        $scope.images.push({id: 6, src: "img/perry.png"});
-        $scope.images.push({id: 7, src: "http://placehold.it/50x50"});
-        $scope.images.push({id: 8, src: "img/adam.jpg"});
-        $scope.images.push({id: 9, src: "img/ben.png"});
-        $scope.images.push({id: 10, src: "img/ionic.png"});
-        $scope.images.push({id: 11, src: "img/max.png"});
-        $scope.images.push({id: 12, src: "img/mike.png"});
-        $scope.images.push({id: 13, src: "img/perry.png"});
-    }
+.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicModal,
+            $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
+            servicioApp) {
+    
+
+ $scope.showDataMain = function() {
+      servicioApp.getMediaMain().success(function(datosMediaMain) {
+            $scope.datosMediaMain = datosMediaMain;
+        }).finally(function() {
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+    };
+
+    $scope.showDataMain();
+
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
