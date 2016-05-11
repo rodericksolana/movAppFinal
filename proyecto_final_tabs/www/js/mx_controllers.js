@@ -1,7 +1,6 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicPopup,
-            $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
+.controller('HomeCtrl', function($scope, $http, $ionicPopup, DataShare, $state,
             servicioApp) {
                 
     $scope.showAlert = function(msg) {
@@ -11,6 +10,7 @@ angular.module('starter.controllers', ['ngCordova'])
           okText: 'Ok',
           okType: 'button-stable'
       });
+
     };
     
 
@@ -24,6 +24,12 @@ angular.module('starter.controllers', ['ngCordova'])
     };
 
     $scope.showDataMain();
+
+ $scope.selectImg = function(datosMediaMains) {
+        DataShare.selectedImg = datosMediaMains;
+        $state.go('tab.home-detail');
+		   
+    };
 
 })
 
