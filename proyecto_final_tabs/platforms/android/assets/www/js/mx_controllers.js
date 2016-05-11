@@ -49,7 +49,14 @@ angular.module('starter.controllers', ['ngCordova'])
     
     $scope.filter = function() {
         var query = $scope.model.query.toLowerCase();
+        
         if (query.length >= 3) {
+            if (DataShare.searchAgain) {
+                DataShare.searchAgain = false;
+                startIndex = 0;
+                $scope.search();
+            }
+            
             $scope.model.results = [];
             for (var i = 0; i < queryResults.length; ++i) {
                 var hashtags = queryResults[i].hashtag;
@@ -60,7 +67,7 @@ angular.module('starter.controllers', ['ngCordova'])
             
             // no enconctró nada en este grupo, vuelve a llamar a search
             // para traer otro grupo de 100
-            if ($scope.model.results.length === 0) {
+            if ($scope.model.results.length === 0 && queryResults.length === 100) {
                 startIndex += 100;
                 $scope.search();
             }
