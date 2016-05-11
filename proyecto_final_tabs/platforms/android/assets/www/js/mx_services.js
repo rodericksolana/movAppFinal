@@ -62,7 +62,7 @@ angular.module('starter.services', [])
 
 .factory('servicioApp', function($http) {
     var baseUrl = 'http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/';
-    var baseUrl2 = 'http://ubiquitous.csf.itesm.mx/~pddm-1182791/content/final/pf/service/';
+    // var baseUrl2 = 'http://ubiquitous.csf.itesm.mx/~pddm-1182791/content/final/pf/service/';
     
     return {
         login: function(login) {
@@ -78,24 +78,32 @@ angular.module('starter.services', [])
         },
         
         imgInsert: function(json) {
-            return $http.post(baseUrl2 + 'img_insert.php', json, {
+            return $http.post(baseUrl + 'img_insert.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        imgSearch: function(json) {
+            return $http.post(baseUrl + 'img_search.php', json, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                 }
             })
         }, 
 
-	getIdMedia: function(personaId){
-            return $http.get(baseUrl+'select_id_media.php?id='+personaId); 
-        },
-	
-	getMedia: function(Id){
-            return $http.get(baseUrl+'select_media.php?id='+Id); 
-        },
-   
-	getMediaMain: function(){
-            return $http.get(baseUrl+'select_media_main.php'); 
-        }
+        getIdMedia: function(personaId){
+                return $http.get(baseUrl+'select_id_media.php?id='+personaId); 
+            },
+        
+        getMedia: function(Id){
+                return $http.get(baseUrl+'select_media.php?id='+Id); 
+            },
+       
+        getMediaMain: function(){
+                return $http.get(baseUrl+'select_media_main.php'); 
+            }
     };
     
 })
@@ -104,12 +112,12 @@ angular.module('starter.services', [])
     var data = {};
     data.coordenate = {};
     data.user = {};
+    data.searchAgain = true;
     
     return {
         coordenate: data.coordenate,
-        user: data.user
-   	
-	
+        user: data.user,
+        searchAgain: data.searchAgain
     }
 })
 

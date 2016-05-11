@@ -20,11 +20,12 @@
     <button class="button button-block button-stable" ng-click="loadImages()">
         Subir Foto
     </button>
-    <button class="button button-block button-stable">
+    <button class="button button-block button-stable" ng-click="takePicture()">
         Tomar Foto
     </button>
     
-    <div>
+    <!-- div para mostrar la imagen y comentarios -->
+    <div ng-hide="model.hide">
     
     <div class="row">
         <img ng-src="{{model.image}}" class="padding" 

@@ -1,8 +1,17 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicModal,
+.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicPopup,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
             servicioApp) {
+                
+    $scope.showAlert = function(msg) {
+      $ionicPopup.alert({
+          title: msg.title,
+          template: msg.message,
+          okText: 'Ok',
+          okType: 'button-stable'
+      });
+    };
     
 
  $scope.showDataMain = function() {
@@ -18,19 +27,51 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
-    $scope.chats = Chats.all();
-    $scope.remove = function(chat) {
-    Chats.remove(chat);
+.controller('SearchCtrl', function($scope, servicioApp, DataShare) {
+    var startIndex = 0;
+    var queryResults = [];
+    $scope.model = {};
+    $scope.model.results = [];
+    $scope.model.query = '';
+    
+    // busqueda de manera remota en el servidor cada 100 filas
+    $scope.search = function() {
+        servicioApp.imgSearch({"startIndex": startIndex}).then(
+        function(resp) {
+            //startIndex += 100;
+            queryResults = resp.data.result;
+            
+        }, function(error) {
+            console.log(error);
+            alert("Hubo un error con la comunicación al servidor. Intente de nuevo.");
+        });
     };
+    
+    $scope.filter = function() {
+        if (DataShare.searchAgain) {
+            $scope.search();
+        }
+        
+        var query = $scope.model.query.toLowerCase();
+        if (query.length >= 3) {
+            $scope.model.results = [];
+            for (var i = 0; i < queryResults.length; ++i) {
+                var hashtags = queryResults[i].hashtag;
+                if (hashtags != null && hashtags.includes(query)) {
+                    $scope.model.results.push(queryResults[i])
+                }
+            }
+            
+            // no enconctró nada en este grupo, vuelve a llamar a search
+            // para traer otro grupo de 100
+            if ($scope.model.results.length === 0) {
+                startIndex += 100;
+                $scope.search();
+            }
+        }
+    };
+    
+    $scope.search();
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
@@ -220,7 +261,8 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 
 
 .controller('AccountDetailCtrl', function($scope,$stateParams,$ionicPopup,$ionicModal,$state,servicioApp, DataShare, $cordovaFileTransfer ){
-        
+
+    DataShare.searchAgain = true;
   
  $scope.showDataMedia = function() {
       servicioApp.getMedia($stateParams.accountId).success(function(datosMedia) {
@@ -251,19 +293,45 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 
 })
 
-.controller('CameraCtrl', function($scope, $stateParams, $http, $ionicModal,
+.controller('CameraCtrl', function($scope, $stateParams, $http, $ionicModal, $ionicPopup,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
-            servicioApp) {
+            $state, servicioApp) {
+    $scope.showAlert = function(msg) {
+      $ionicPopup.alert({
+          title: msg.title,
+          template: msg.message,
+          okText: 'Ok',
+          okType: 'button-stable'
+      });
+    };
+    
+    DataShare.searchAgain = true;
                 
     $scope.model = {};
     $scope.model.image = '';
+    $scope.model.hide = true;
     $scope.model.geolocalizado = false;
     
-    $scope.collection = {
-        selectedImage : ''
+    $scope.getHashtags = function() {
+        var description = $scope.model.description.toLowerCase();
+        var hashes = [];
+        do{
+            var index = description.indexOf("#");
+            var space = description.indexOf(' ', index);
+            space = space === -1 ? description.length :
+                                   space;
+            hashes.push(description.substring(index, space));
+            
+            description = description.substring(space + 1)
+        } while (index !== -1);
+        hashes.pop();   //elimino el último
+        
+        var tags = '';
+        for (var i = 0; i < hashes.length; ++i) {
+            tags += hashes[i] + ',';
+        }
+        return tags;
     };
-    
-    var myLatLng;
     
     $scope.loadImages = function() {
         document.addEventListener("deviceready", function () {
@@ -277,8 +345,7 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
             
             // como sólo se permite seleccionar una, no es necesario hacer un ciclo
             if (results.length > 0) {
-                $scope.collection.selectedImage = results[0];
-                $scope.model.image = $scope.collection.selectedImage;
+                $scope.model.image = results[0];
                 $scope.model.hide = false; // mostramos la imagen
             }
             
@@ -286,6 +353,26 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
             console.log('Error: ' + JSON.stringify(error));    // In case of error
         });
         })
+    };
+    
+    $scope.takePicture = function() {
+        document.addEventListener("deviceready", function () {
+        var options = {
+          destinationType: Camera.DestinationType.FILE_URI,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          encodingType: Camera.EncodingType.JPEG,
+          targetWidth: 640,
+          targetHeight: 640,
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageURI) {
+            $scope.model.image = imageURI;
+            $scope.model.hide = false; // mostramos la imagen
+        }, function(err) {
+          console.log(err);
+        });
+
+      }, false);
     };
     
     $scope.Geolocalizar = function () { $ionicModal.fromTemplateUrl('templates/mapa_modal.html', {
@@ -323,16 +410,24 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
                 return false;
             } 
             
+            var ubicacion = DataShare.coordenate.latitude === undefined ? ''
+                          : DataShare.coordenate.latitude + "," + 
+                            DataShare.coordenate.longitude;
+                            
+            var hashtags = $scope.getHashtags();
+            
             var img_path = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + filename;
             servicioApp.imgInsert({"idPersona": DataShare.user.id,
-                                "ubicacion": DataShare.coordenate.latitude + "," + 
-                                             DataShare.coordenate.longitude,
+                                "ubicacion": ubicacion,
                                 "descripcion": $scope.model.description,
-                                "tipo": 'foto', // no está vendido aún
-                                "ruta": img_path}).then(
+                                "tipo": 'foto', 
+                                "ruta": img_path,
+                                "hashtag": hashtags}).then(
             function(resp) {
-                alert("Datos guardados exitosamente.");	
-                $state.go('app.main');
+                //$scope.showAlert({title: "Info", message: "Datos guardados exitosamente."});	
+                alert("Datos guardados exitosamente.");
+                $scope.clearView();
+                $state.go('tab.account');
             }, function(error) {
                 console.log(error);
                 alert("Hubo un error con la comunicación al servidor. Intente de nuevo.");
@@ -345,9 +440,14 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
             // constant progress updates
         });
     };
-
-
-
+    
+    // limpia la pantalla y restablece los valores predeterminados
+    $scope.clearView = function() {
+        $scope.model.image = '';
+        $scope.model.hide = true;
+        $scope.model.geolocalizado = false;
+        $scope.model.description = '';
+    };
   
 })
 
