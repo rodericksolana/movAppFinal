@@ -120,8 +120,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
   
-<<<<<<< HEAD
-=======
+
   .state('tab.img-detail', {
       url: '/img/:imgId',
       views: {
@@ -141,8 +140,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
->>>>>>> 5a78d065ae154973605e9ac55bfccc79d2c1cf8c
-  ;
+
+ ;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
