@@ -1,0 +1,27 @@
+<ion-view view-title="Búsqueda">
+<ion-content>
+ <div id="search-bar">
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper" id="search-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Buscar" ng-model="model.query" ng-change="filter()">
+      </label>
+    </div>
+  </div>
+
+    <div class="padding" id="search-result">
+    <div class="row" ng-repeat="image in model.results" ng-if="$index % 3 === 0">
+        <div class="col col-33" ng-if="$index < model.results.length" 
+        ng-click="selectImg({{model.results[$index]}})">
+            <img ng-src="{{model.results[$index].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 1 < model.results.length" ui-sref="tab.img-detail({imgId: {{model.results[$index + 1].id}}})">
+            <img ng-src="{{model.results[$index + 1].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 2 < model.results.length" ui-sref="tab.img-detail({imgId: {{model.results[$index + 2].id}}})">
+            <img ng-src="{{model.results[$index + 2].ruta}}" width="100%" />
+        </div>
+    </div>
+    </div>
+  </ion-content>
+</ion-view>
