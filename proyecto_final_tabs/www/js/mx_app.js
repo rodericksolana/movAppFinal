@@ -69,6 +69,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
+
+  .state('tab.home-detail', {
+      url: '/home/:imgId',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/img-detail.html',
+          controller: 'ImgDetailCtrl'
+        }
+      }
+    })
+
   .state('tab.search', {
       url: '/search',
       views: {
@@ -118,15 +129,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
   
-  .state('tab.img-detail', {
-      url: '/img/:imgId',
-      views: {
-        'tab-home': {
-          templateUrl: 'templates/img-detail.html',
-          controller: 'ImgDetailCtrl'
-        }
-      }
-    })
   ;
 
   // if none of the above states are matched, use this as the fallback
