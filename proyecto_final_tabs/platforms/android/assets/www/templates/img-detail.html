@@ -2,13 +2,13 @@
   <ion-content class="padding">
     <div class="row">
         <div class="item-avatar" href="#">
-          <img src="/img/adam.jpg">
-          <h4>Venkman</h4>
+          <img ng-src="{{model.user.img}}">
+          <h4>{{model.user.name}}</h4>
           <p>Ubicación</p>
         </div>
     </div>
     <div class="row">
-        <img src="/img/adam.jpg" width="100%" height="420px;">
+        <img ng-src="{{model.image.ruta}}" width="100%" height="420px;">
     </div>
     <div class="row">
         <div class="col col-10">

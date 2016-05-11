@@ -27,7 +27,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
-.controller('SearchCtrl', function($scope, servicioApp, DataShare) {
+.controller('SearchCtrl', function($scope, servicioApp, DataShare, $state) {
     var startIndex = 0;
     var queryResults = [];
     $scope.model = {};
@@ -74,26 +74,39 @@ angular.module('starter.controllers', ['ngCordova'])
         }
     };
     
+    $scope.selectImg = function(image) {
+        DataShare.selectedImg = image;
+        $state.go('tab.search-detail');
+    };
+    
     $scope.search();
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-    $scope.chat = Chats.get($stateParams.chatId);
-})
 
-
-
-
-.controller('ImgDetailCtrl', function($scope, $stateParams) {
+.controller('ImgDetailCtrl', function($scope, $stateParams, DataShare, servicioApp) {
     $scope.showComment = function() {
         $scope.model.showComment = true;
         var comment = document.getElementById("imgDetailComment");
         comment.click();
     };
     
-    console.log("ImgDetailCtrl imgId : " + $stateParams.imgId);
     $scope.model = {};
+    $scope.model.image = DataShare.selectedImg;
+    
     $scope.model.showComment = false;
+    
+    servicioApp.getPersonById({id: $scope.model.image.idPersona}).then(
+    function(resp) {
+        if (resp.data.respCode == 1) {
+            $scope.model.user = {};
+            $scope.model.user.img = resp.data.result[0].imagen;
+            $scope.model.user.name = resp.data.result[0].Usuario;
+        } else {
+            alert("Hubo un error al recuperar los datos, intente nuevamente.");
+        }
+    }, function(error) {
+        alert("Hubo un error al contactar al servidor, intente de nuevo.");
+    });
 })
 
 
