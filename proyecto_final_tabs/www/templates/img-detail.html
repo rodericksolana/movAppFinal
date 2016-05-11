@@ -1,14 +1,32 @@
+<script id="templates/mapa_modal.html" type="text/ng-template">
+  <div class="modal" style="height: 100%;">
+        <header class="bar bar-header bar-stable padding">
+            <h1 class="title">Ubicación</h1>
+            <div class="button button-clear" ng-click="modal.remove()"><span class="icon ion-close"></span></div>
+        </header>
+        
+            <pddm-mapa scroll="false" data-tap-disabled="true"  geolocalizado="model.geolocalizado" 
+            style="width: 100%;height: 70%;display: block;" class="padding"></pddm-mapa>
+            
+           <div class="row">
+            <button class="button button-full button-stable" ng-click="saveLocation()">Seleccionar ubicación</button>
+          </div>
+        
+      </div>
+</script>
+
+
 <ion-view view-title="México Lindo">
   <ion-content class="padding">
     <div class="row">
         <div class="item-avatar" href="#">
-          <img src="/img/adam.jpg">
-          <h4>Venkman</h4>
-          <p>Ubicación</p>
+          <img ng-src="{{model.user.img}}">
+          <h4>{{model.user.name}}</h4>
+          <p ng-show = "model.showLoc" ng-click="Geolocalizar()">Ubicación</p>
         </div>
     </div>
     <div class="row">
-        <img src="/img/adam.jpg" width="100%" height="420px;">
+        <img ng-src="{{model.image.ruta}}" width="100%" height="420px;">
     </div>
     <div class="row">
         <div class="col col-10">
