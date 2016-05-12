@@ -5,13 +5,9 @@
             <div class="button button-clear" ng-click="modal.remove()"><span class="icon ion-close"></span></div>
         </header>
         
-            <pddm-mapa scroll="false" data-tap-disabled="true"  geolocalizado="model.geolocalizado" 
-            style="width: 100%;height: 70%;display: block;" class="padding"></pddm-mapa>
-            
-           <div class="row">
-            <button class="button button-full button-stable" ng-click="saveLocation()">Seleccionar ubicación</button>
-          </div>
-        
+            <pddm-loc scroll="false" data-tap-disabled="true"  geolocalizado="model.geolocalizado" 
+            style="width: 100%;height: 70%;display: block;" class="padding"></pddm-loc>
+           
       </div>
 </script>
 
@@ -22,7 +18,7 @@
         <div class="item-avatar" href="#">
           <img ng-src="{{model.user.img}}">
           <h4>{{model.user.name}}</h4>
-          <p ng-show = "model.showLoc" ng-click="Geolocalizar()">Ubicación</p>
+          <a ng-show= "model.showLoc" ng-click="Geolocalizar()">Ubicación</a>
         </div>
     </div>
     <div class="row">
@@ -30,15 +26,18 @@
     </div>
     <div class="row">
         <div class="col col-10">
-            <a class="button button-icon icon ion-ios-heart-outline"></a>
+            <a ng-click="vote()" class="button button-icon icon {{model.voteIcon}}"></a>
         </div>
         <div class="col col-10">
             <a class="button button-icon icon ion-ios-chatbubble-outline" 
             ng-click="showComment()"></a>
         </div>
         <div class="col col-10">
-            <a class="button button-icon icon ion-ios-flag-outline"></a>
+            <a ng-click="report()" class="button button-icon icon ion-ios-flag-outline"></a>
         </div>
+    </div>
+    <div class="row" ng-show="model.totalVotes > 0"> 
+    <p class="padding-left">{{model.totalVotes}} me gusta</p>
     </div>
     <hr> <!-- linea horizantal -->
     

@@ -83,7 +83,8 @@ angular.module('starter.controllers', ['ngCordova'])
 })
 
 
-.controller('ImgDetailCtrl', function($scope, $stateParams, DataShare, servicioApp) {
+.controller('ImgDetailCtrl', function($scope, $stateParams, $ionicModal, $ionicPopup,
+            DataShare, servicioApp, Constants) {
     $scope.showComment = function() {
         $scope.model.showComment = true;
         var comment = document.getElementById("imgDetailComment");
@@ -94,6 +95,19 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.model.image = DataShare.selectedImg;
     
     $scope.model.showComment = false;
+    $scope.model.showLoc = false;
+    $scope.model.voteIcon = '';
+    $scope.model.totalVotes = '';
+    
+    if ($scope.model.image.ubicacion != null && $scope.model.image.ubicacion != ''
+        && $scope.model.image.ubicacion != 'undefined,undefined') {
+        $scope.model.showLoc = true;
+        var loc = $scope.model.image.ubicacion.split(',');
+        DataShare.coordenate = {latitude: loc[0], longitude: loc[1]};
+        DataShare.setLoc = true;
+    } else {
+        DataShare.setLoc = false;
+    }
     
     servicioApp.getPersonById({id: $scope.model.image.idPersona}).then(
     function(resp) {
@@ -101,11 +115,100 @@ angular.module('starter.controllers', ['ngCordova'])
             $scope.model.user = {};
             $scope.model.user.img = resp.data.result[0].imagen;
             $scope.model.user.name = resp.data.result[0].Usuario;
+            
         } else {
             alert("Hubo un error al recuperar los datos, intente nuevamente.");
         }
     }, function(error) {
         alert("Hubo un error al contactar al servidor, intente de nuevo.");
+    });
+    
+    $scope.Geolocalizar = function () { $ionicModal.fromTemplateUrl('templates/mapa_modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+    });
+    };
+    
+    $scope.report = function() {
+       var confirmPopup = $ionicPopup.confirm({
+         title: 'Reportar',
+         template: '¿Estás seguro que quieres reportar esta publicación?'
+       });
+
+       confirmPopup.then(function(res) {
+         if(res) {
+            servicioApp.reporteInsert({idMedia: $scope.model.image.id, 
+                                       idReportador: DataShare.user.id}).then(
+            function(resp) {
+                if (resp.data.respCode === 1) {
+                    $ionicPopup.alert({
+                        title: 'Info',
+                        template: 'Reporte realizado con éxito.'
+                    });
+
+                } else {
+                    alert("Hubo un error al realizar el reporte, intente nuevamente.");
+                }
+            }, function(error) {
+                alert("Hubo un error al contactar al servidor, intente nuevamente.");
+            });
+         } else {
+            console.log('reportar cancelado');
+         }
+       });
+     };
+     
+    $scope.vote = function() {
+        if ($scope.model.voteIcon === Constants.IconNotVoted) {
+            servicioApp.votoInsert({idPublicacion: $scope.model.image.id, 
+                                    idPersonas: DataShare.user.id}).then(
+            function(resp) {
+                if (resp.data.respCode === 1) {
+                    $scope.model.voteIcon = Constants.IconVoted;
+                    $scope.model.totalVotes = parseInt($scope.model.totalVotes) + 1;
+                    $scope.model.totalVotes += '';
+                } else {
+                    alert("Hubo un error al realizar la operación, intente nuevamente.");
+                }
+            }, function(error) {
+                alert("Hubo un error al contactar al servidor, intente nuevamente.");
+            });
+        } else {
+            servicioApp.votoDelete({idPublicacion: $scope.model.image.id, 
+                                    idPersonas: DataShare.user.id}).then(
+            function(resp) {
+                if (resp.data.respCode === 1) {
+                    $scope.model.voteIcon = Constants.IconNotVoted;
+                    $scope.model.totalVotes = parseInt($scope.model.totalVotes) -1;
+                    $scope.model.totalVotes += '';
+                } else {
+                    alert("Hubo un error al realizar la operación, intente nuevamente.");
+                }
+            }, function(error) {
+                alert("Hubo un error al contactar al servidor, intente nuevamente.");
+            });
+        }
+    };
+    
+    servicioApp.votoSelect({idPublicacion: $scope.model.image.id, 
+                            idPersonas: DataShare.user.id}).then(
+    function(resp) {
+        if (resp.data.respCode === 1) {
+            if (resp.data.result.user > 0) {
+                $scope.model.voteIcon = Constants.IconVoted;
+            } else {
+                $scope.model.voteIcon = Constants.IconNotVoted;
+            }
+            
+            $scope.model.totalVotes = resp.data.result.total;
+        } else {
+            $scope.model.voteIcon = Constants.IconNotVoted;
+        }
+    }, function(error) {
+        $scope.model.voteIcon = Constants.IconNotVoted;
     });
 })
 
@@ -350,6 +453,7 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
     };
     
     $scope.loadImages = function() {
+        DataShare.setLoc = false;
         document.addEventListener("deviceready", function () {
         var options = {
                 maximumImagesCount: 1, // número máximo de images a seleccionar
@@ -372,6 +476,7 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
     };
     
     $scope.takePicture = function() {
+        DataShare.setLoc = false;
         document.addEventListener("deviceready", function () {
         var options = {
           destinationType: Camera.DestinationType.FILE_URI,
@@ -558,6 +663,78 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
                     CreateMarker(LatLng);
                 });
             }
+        }
+    }
+})
+
+.directive('pddmLoc', function ($ionicLoading) {
+    return {
+        restrict: 'E',
+      	scope: {
+          latitud : "=",
+          longitud : "=",
+          geolocalizado : "="
+        },
+      	bindToController: true,
+        controllerAs: "$ctrl",
+        template: "<div ng-model='ubicacion.latitud'></div>",
+        controller: function ($scope, $element, DataShare) {
+          function CreateMap(successFunction) {
+                var map = new google.maps.Map($element[0], {
+                    //zoom: 17,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    panControl: false,
+                    streetViewControl: false,
+                    zoomControlOptions: {
+                        position: google.maps.ControlPosition.TOP_CENTER
+                    }
+                });
+                var styledMapType = new google.maps.StyledMapType([
+                {
+                    featureType: 'all',
+                    elementType: 'all'
+                }], {
+                    map: map,
+                    name: 'Night Map'
+                });
+                map.mapTypes.set('map-style', styledMapType);
+                map.setMapTypeId('map-style');
+                google.maps.event.addDomListener($element[0], 'mousedown', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
+                // google.maps.event.addListener(map, 'click', function (e) {
+                    // CreateMarker(e.latLng);
+                // });
+                
+                var marker = new google.maps.Marker();
+                function CreateMarker(latLng) {
+                    $scope.latitud = DataShare.coordenate.latitude; //latitud
+                    $scope.longitud = DataShare.coordenate.longitude; //longitud
+                    
+                    latLng = new google.maps.LatLng($scope.latitud, $scope.longitud);
+                    
+                    marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        position: latLng,
+                        animation: google.maps.Animation.DROP,
+                        map: map
+                    });
+                    //map.setZoom(17);
+                    setTimeout(function () {
+                        map.setZoom(17);
+                        map.setCenter(latLng);
+                    }, 500);
+                }
+                if (successFunction) {
+                    successFunction(CreateMarker);
+                }
+            }
+            CreateMap(function (CreateMarker) {
+                CreateMarker(null);
+                $ionicLoading.hide();
+                $scope.geolocalizado = true;
+            });
         }
     }
 })

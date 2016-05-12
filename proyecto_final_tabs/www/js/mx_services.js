@@ -2,8 +2,8 @@ angular.module('starter.services', [])
 
 .factory('Constants', function() {
     return {
-        IconILikeNoPressed: "ion-ios-heart-outline",
-        IconILikePressed: "ion-ios-heart",
+        IconNotVoted: "ion-ios-heart-outline",
+        IconVoted: "ion-ios-heart",
         
         IconComment: "ion-ios-chatbubble-outline"
     }
@@ -30,6 +30,38 @@ angular.module('starter.services', [])
         
         imgInsert: function(json) {
             return $http.post(baseUrl + 'img_insert.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        reporteInsert: function(json) {
+            return $http.post(baseUrl + 'reporte_insert.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        votoInsert: function(json) {
+            return $http.post(baseUrl + 'voto_insert.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        votoDelete: function(json) {
+            return $http.post(baseUrl + 'voto_delete.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        votoSelect: function(json) {
+            return $http.post(baseUrl + 'voto_select.php', json, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                 }
@@ -73,12 +105,14 @@ angular.module('starter.services', [])
     data.user = {};
     data.searchAgain = true;
     data.selectedImg = null;
+    data.setLoc = false;
     
     return {
         coordenate: data.coordenate,
         user: data.user,
         searchAgain: data.searchAgain,
-        selectedImg: data.selectedImg
+        selectedImg: data.selectedImg,
+        setLoc: data.setLoc
     }
 })
 
