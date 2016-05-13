@@ -134,8 +134,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       url: '/account/:accountId',
       views: {
         'tab-account': {
-          templateUrl: 'templates/account-detail.html',
-          controller: 'AccountDetailCtrl'
+          templateUrl: 'templates/img-detail.html',
+          controller: 'ImgDetailCtrl'
         }
       }
     })

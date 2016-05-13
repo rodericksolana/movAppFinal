@@ -17,13 +17,13 @@
     
 </p>
 <div class="row" ng-repeat="datosMedias in datosMedia" ng-if="$index % 3 === 0">
-<div class="col col-33" ng-if="$index < datosMedia.length"  ui-sref="tab.account-detail({accountId: {{datosMedia[$index].id}}})">
+<div class="col col-33" ng-if="$index < datosMedia.length"  ng-click="selectImg({{datosMedia[$index]}})">
             <img ng-src="{{datosMedia[$index].ruta}}" width="100%" />
         </div>
-        <div class="col col-33" ng-if="$index + 1 < datosMedia.length"  ui-sref="tab.account-detail({accountId: {{datosMedia[$index+1].id}}})">
+        <div class="col col-33" ng-if="$index + 1 < datosMedia.length" ng-click="selectImg({{datosMedia[$index + 1]}})">
             <img ng-src="{{datosMedia[$index + 1].ruta}}" width="100%" />
         </div>
-        <div class="col col-33" ng-if="$index + 2 < datosMedia.length"   ui-sref="tab.account-detail({accountId: {{datosMedia[$index+2].id}}})">
+        <div class="col col-33" ng-if="$index + 2 < datosMedia.length"   ng-click="selectImg({{datosMedia[$index + 2]}})">
             <img ng-src="{{datosMedia[$index + 2].ruta}}" width="100%" />
         </div>
     

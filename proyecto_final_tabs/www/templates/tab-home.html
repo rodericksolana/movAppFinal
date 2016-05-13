@@ -19,13 +19,13 @@
 -->
 
 <div class="col col-33" ng-if="$index < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index]}})" >
-            <img ng-src="{{datosMediaMain[$index].ruta}}" width="100%" />
+            <img ng-src="{{datosMediaMain[$index].ruta}}" width="100" height="100" />
         </div>
         <div class="col col-33" ng-if="$index + 1 < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index + 1]}})" >
-            <img ng-src="{{datosMediaMain[$index + 1].ruta}}" width="100%" />
+            <img ng-src="{{datosMediaMain[$index + 1].ruta}}" width="100" height="100"/>
         </div>
         <div class="col col-33" ng-if="$index + 2 < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index + 2]}})" >
-            <img ng-src="{{datosMediaMain[$index + 2].ruta}}" width="100%" />
+            <img ng-src="{{datosMediaMain[$index + 2].ruta}}" width="100" height="100"/>
         </div>
     
 </div>  

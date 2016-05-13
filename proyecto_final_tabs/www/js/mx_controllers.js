@@ -133,6 +133,7 @@ angular.module('starter.controllers', ['ngCordova'])
     
     $scope.model = {};
     $scope.model.perfil = DataShare.user.perfil;
+    $scope.model.id= DataShare.user.id;
     $scope.model.image = DataShare.selectedImg;
     
     $scope.model.showComment = false;
@@ -317,6 +318,48 @@ angular.module('starter.controllers', ['ngCordova'])
     }, function(error) {
         $scope.model.voteIcon = Constants.IconNotVoted;
     });
+	
+$scope.carga = function()
+{
+alert("Carga");
+
+};
+
+
+$scope.comenta = function()
+{
+
+ servicioApp.insertCom({
+                    idPersonas: DataShare.user.id,
+                    idPublicacion: $scope.model.image.id,
+                    texto: $scope.model.comment
+                }).success(function(data){
+var string;
+string= data.trim();
+		 if(string == 1)
+        {
+$scope.Comentarios();
+	 
+		}
+	});
+
+
+
+}; //Cierre de funcion comenta
+//$scope.carga();
+
+$scope.Comentarios = function() {
+      servicioApp.getComents($scope.model.image.id ).success(function(datosComs) {
+            $scope.datosComs = datosComs;
+ }).finally(function() {
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+    };
+       
+    $scope.Comentarios();
+
+ 
 })
 
 
@@ -463,7 +506,7 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
 
 .controller('AccountCtrl', function($scope, $stateParams, $http, $ionicModal,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
-            servicioApp) {
+            servicioApp, $state  ,$ionicPopup, DataShare) {
 
 
  $scope.showDataIdMedia = function() {
@@ -487,6 +530,13 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 
 
 
+ $scope.selectImg = function(datosMedia) {
+        DataShare.selectedImg = datosMedia;
+        $state.go('tab.account-detail');
+		   
+    };
+
+
 })//Cierre controlador Cuenta
 
 
@@ -504,6 +554,11 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
        
     $scope.showDataMedia();
     
+$scope.elimina = function($event){
+
+	alert(event.target.id);
+document.getElementById("elimina").style.visibility="hidden"; 
+};
 
 
    	

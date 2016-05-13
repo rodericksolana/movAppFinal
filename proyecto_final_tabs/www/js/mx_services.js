@@ -120,7 +120,20 @@ angular.module('starter.services', [])
        
         getMediaMain: function(){
                 return $http.get(baseUrl+'select_media_main.php'); 
-            }
+            },
+
+	getComents: function(idPublicacion){
+                return $http.get(baseUrl+'select_coments.php?idMedia='+idPublicacion); 
+            },
+
+
+insertCom: function(json) {
+            return $http.post(baseUrl + 'insertCom.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }
     };
     
 })
