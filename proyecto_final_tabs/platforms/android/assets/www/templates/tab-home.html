@@ -7,13 +7,24 @@
             on-refresh="showDataMain()">
           </ion-refresher>
 <div class="row" ng-repeat="datosMediaMains in datosMediaMain" ng-if="$index % 3 === 0">
-<div class="col col-33" ng-if="$index < datosMediaMain.length" ui-sref="tab.home-detail({accountId: {{datosMediaMain[$index].id}}})" >
+<!--  <div class="col col-33" ng-if="$index < datosMediaMain.length" ui-sref="tab.home-detail({accountId: {{datosMediaMain[$index].id}}})" >
             <img ng-src="{{datosMediaMain[$index].ruta}}" width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 1 < datosMediaMain.length" ui-sref="tab.home-detail({accountId: {{datosMediaMain[$index + 1].id}}})">
             <img ng-src="{{datosMediaMain[$index + 1].ruta}}" width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 2 < datosMediaMain.length" ui-sref="tab.home-detail({accountId: {{datosMediaMain[$index + 2].id}}})" >
+            <img ng-src="{{datosMediaMain[$index + 2].ruta}}" width="100%" />
+        </div>
+-->
+
+<div class="col col-33" ng-if="$index < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index]}})" >
+            <img ng-src="{{datosMediaMain[$index].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 1 < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index + 1]}})" >
+            <img ng-src="{{datosMediaMain[$index + 1].ruta}}" width="100%" />
+        </div>
+        <div class="col col-33" ng-if="$index + 2 < datosMediaMain.length" ng-click="selectImg({{datosMediaMain[$index + 2]}})" >
             <img ng-src="{{datosMediaMain[$index + 2].ruta}}" width="100%" />
         </div>
     

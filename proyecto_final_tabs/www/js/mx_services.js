@@ -44,6 +44,32 @@ angular.module('starter.services', [])
             })
         }, 
         
+        reporteSelect: function(json) {
+            return $http.post(baseUrl + 'reporte_select.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        // quita el el reporte de la tabla de Reporte sin eliminar la foto de Media
+        reporteQuitar: function(json) {
+            return $http.post(baseUrl + 'reporte_quitar.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
+        // elimina el reporte y la imagen correspondiente de Media
+        reporteDelete: function(json) {
+            return $http.post(baseUrl + 'reporte_delete.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
         votoInsert: function(json) {
             return $http.post(baseUrl + 'voto_insert.php', json, {
                 headers: {

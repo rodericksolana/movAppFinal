@@ -5,22 +5,32 @@ navigation history that also transitions its views in and out.
 -->
 <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
-  <ion-tab title="Inicio" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/tab/dash">
+  <ion-tab title="Inicio" ng-if="model.perfil == 'user'" 
+  icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/tab/dash">
     <ion-nav-view name="tab-home"></ion-nav-view>
   </ion-tab>
+  
+  <ion-tab title="Reportados" ng-if="model.perfil == 'admin'" 
+  icon-off="ion-ios-flag-outline" icon-on="ion-ios-flag" ui-sref="tab.report">
+    <ion-nav-view name="tab-report"></ion-nav-view>
+  </ion-tab>
 
-  <ion-tab title="Buscar" icon-off="ion-ios-search" icon-on="ion-ios-search-strong" 
-  href="#/tab/search" >
+  <ion-tab title="Buscar" ng-if="model.perfil == 'admin' || model.perfil == 'user'" 
+  icon-off="ion-ios-search" icon-on="ion-ios-search-strong" href="#/tab/search" >
     <ion-nav-view name="tab-search"></ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="Foto" icon-off="ion-ios-camera-outline" icon-on="ion-ios-camera" ui-sref="tab.cam">
+  <ion-tab title="Foto" ng-if="model.perfil == 'user'" 
+  icon-off="ion-ios-camera-outline" icon-on="ion-ios-camera" ui-sref="tab.cam">
     <ion-nav-view name="tab-cam"></ion-nav-view>
   </ion-tab>
   
-  <ion-tab title="Cuenta" icon-off="ion-ios-person-outline" icon-on="ion-ios-person" href="#/tab/account">
+  <ion-tab title="Cuenta" ng-if="model.perfil == 'admin' || model.perfil == 'user'" 
+  icon-off="ion-ios-person-outline" icon-on="ion-ios-person" href="#/tab/account">
     <ion-nav-view name="tab-account"></ion-nav-view>
   </ion-tab>
+  
+  
 
 
 </ion-tabs>

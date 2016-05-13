@@ -1,5 +1,10 @@
 angular.module('starter.controllers', ['ngCordova'])
 
+.controller('TabCtrl', function($scope, DataShare, $state) {
+    $scope.model = {};
+    $scope.model.perfil = DataShare.user.perfil;
+})
+
 .controller('HomeCtrl', function($scope, $http, $ionicPopup, DataShare, $state,
             servicioApp) {
                 
@@ -31,6 +36,35 @@ angular.module('starter.controllers', ['ngCordova'])
 		   
     };
 
+})
+
+.controller('ReportCtrl', function($scope, servicioApp, DataShare, $state) {
+    $scope.model = {};
+    $scope.model.reports = [];
+    
+    $scope.showReports = function() {
+        servicioApp.reporteSelect({}).then(
+        function(resp) {
+            if (resp.data.respCode === 1) {
+                $scope.model.reports = resp.data.result;
+            } 
+        }, function(error) {
+            console.log(error);
+            alert("Hubo un error con la comunicación al servidor. Intente de nuevo.");
+        });
+    }
+    
+    $scope.selectImg = function(image) {
+        DataShare.selectedImg = {ubicacion: null,
+                                 idPersona: image.idPersonas,
+                                 id: image.mediaId,
+                                 ruta: image.mediaRuta,
+                                 reporteId: image.reporteId,
+                                 descripcion: image.mediaDesc};
+        $state.go('tab.report-detail');
+    };
+    
+    $scope.showReports();
 })
 
 .controller('SearchCtrl', function($scope, servicioApp, DataShare, $state) {
@@ -89,8 +123,8 @@ angular.module('starter.controllers', ['ngCordova'])
 })
 
 
-.controller('ImgDetailCtrl', function($scope, $stateParams, $ionicModal, $ionicPopup,
-            DataShare, servicioApp, Constants) {
+.controller('ImgDetailCtrl', function($scope, $stateParams, $ionicModal, $ionicPopup, 
+            $state, $ionicHistory, DataShare, servicioApp, Constants) {
     $scope.showComment = function() {
         $scope.model.showComment = true;
         var comment = document.getElementById("imgDetailComment");
@@ -98,6 +132,7 @@ angular.module('starter.controllers', ['ngCordova'])
     };
     
     $scope.model = {};
+    $scope.model.perfil = DataShare.user.perfil;
     $scope.model.image = DataShare.selectedImg;
     
     $scope.model.showComment = false;
@@ -199,6 +234,72 @@ angular.module('starter.controllers', ['ngCordova'])
         }
     };
     
+    $scope.quitarReporte = function() {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Quitar Reporte',
+            template: '¿Estás seguro que quieres quitar el reporte de esta imagen?'
+        });
+        
+        confirmPopup.then(function(resp) {
+            if (resp) {
+                servicioApp.reporteQuitar({idMedia: $scope.model.image.id}).then(
+                function(resp) {
+                    if (resp.data.respCode === 1) {
+                        var alerta = $ionicPopup.alert({
+                            title: 'Info',
+                            template: 'Reporte eliminado con éxito.'
+                        });
+                        alerta.then(function(resp) {
+                            console.log("Alerta respuesta: " + resp);
+                            $ionicHistory.goBack();
+                        });
+                    } else {
+                        $ionicPopup.alert({
+                            title: 'Info',
+                            template: 'Hubo un error al eliminar el reporte, intente nuevamente.'
+                        });
+                    }
+                }, function(error) {
+                    alert("Hubo un error al contactar al servidor, intente nuevamente.");
+                });
+            }
+        })
+    };
+    
+    $scope.eliminarImagenReportada = function() {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Eliminar Imagen',
+            template: '¿Estás seguro que quieres eliminar esta imagen?'
+        });
+        
+        confirmPopup.then(function(resp) {
+            if (resp) {
+                servicioApp.reporteDelete({idMedia: $scope.model.image.id}).then(
+                function(resp) {
+                    if (resp.data.respCode === 1) {
+                        var alerta = $ionicPopup.alert({
+                            title: 'Info',
+                            template: 'Imagen eliminada con éxito.'
+                        });
+                        alerta.then(function(resp) {
+                            console.log("Alerta respuesta: " + resp);
+                            $ionicHistory.goBack();
+                        });
+                    } else {
+                        $ionicPopup.alert({
+                            title: 'Info',
+                            template: 'Hubo un error al eliminar la imagen, intente nuevamente.'
+                        });
+                    }
+                }, function(error) {
+                    alert("Hubo un error al contactar al servidor, intente nuevamente.");
+                });
+                
+            }
+        });
+    };
+    
+    
     servicioApp.votoSelect({idPublicacion: $scope.model.image.id, 
                             idPersonas: DataShare.user.id}).then(
     function(resp) {
@@ -220,7 +321,8 @@ angular.module('starter.controllers', ['ngCordova'])
 
 
 
-.controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, DataShare, $cordovaCamera, $cordovaFileTransfer) {
+.controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, 
+            DataShare, $cordovaCamera, $cordovaFileTransfer) {
 
 var imageURL;
 
@@ -241,7 +343,11 @@ var imageURL;
         servicioApp.login($scope.login).then(function (data) {
 		if (data.data.respCode == 1) {
             DataShare.user = data.data.result[0];
-            $state.go('tab.home');
+            if (DataShare.user.perfil === 'user') {
+                $state.go('tab.home');
+            } else {
+                $state.go('tab.report');
+            }
         } else {
             $ionicPopup.alert({
         title: "ERROR",

@@ -1,0 +1,22 @@
+<ion-view view-title="México Lindo">
+
+
+<ion-content class="padding">
+    <div class="bar bar-header bar-stable padding">
+        <h3 class="padding-bottom">Publicaciones Reportadas</h3>
+    </div>
+    <ion-refresher
+        pulling-text="Arrastre para actualizar..."
+        on-refresh="showReports()">
+    </ion-refresher>
+    <div class="list" style="padding-top: 60px;">
+        <a class="item item-thumbnail-left" ng-repeat="report in model.reports"
+        ng-click="selectImg(report)">
+            <img src="{{report.mediaRuta}}">
+            <h2>{{report.usuario}}</h2>
+            <p>{{report.mediaDesc}}</p>
+        </a>
+    </div>
+    
+</ion-content>
+</ion-view>
