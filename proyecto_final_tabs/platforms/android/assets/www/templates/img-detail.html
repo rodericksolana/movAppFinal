@@ -14,6 +14,12 @@
 
 <ion-view view-title="México Lindo">
   <ion-content class="padding" >
+
+	  <ion-refresher
+            pulling-text="Arrastre para actualizar..."
+            on-refresh="Comentarios()">
+          </ion-refresher>
+
     <div class="row">
         <div class="item-avatar" href="#">
           <img ng-src="{{model.user.img}}">
@@ -70,22 +76,7 @@
         <a class="icon ion-chatbubble-working"></a>
     </div>
     <!-- lista de comentarios -->
-<!--
-    <div class="list">
-        <div class="item item-avatar item-text-wrap">
-          <img src="/img/ben.png">
-          <a>Venkman</a>
-          <h3>Back off, man. I'm a scientist. Back off, man. I'm a scientist.I'm a scientist. Back off, man. I'm aaa</h3>
-          <p>Fecha</p>
-        </div>
-        <div class="item item-avatar item-text-wrap">
-          <img src="/img/max.png">
-          <a>Max</a>
-          <h3>Lelo lelo</h3>
-          <p>Fecha</p>
-        </div>
-    </div>
--->
+
 
  <ion-list show-Delete = "data.showDelete" show-Reorder = "data.showReorder">
             <ion-item class="item-avatar item-icon-right" ng-repeat="datosCom in datosComs" type="item-text-wrap" >
@@ -93,7 +84,7 @@
                 <i class="icon ion-ios7-arrow-right"></i>
                 <h2>{{datosCom.Usuario}} dice: {{datosCom.texto}}
 </h2>
- <i class="icon ion-chevron-right icon-accessory"></i>
+ 
 					  
                 <!-- <ion-delete-button class="ion-minus-circled" ng-click="delete(datosalumno);"> </ion-delete-button>  -->
 

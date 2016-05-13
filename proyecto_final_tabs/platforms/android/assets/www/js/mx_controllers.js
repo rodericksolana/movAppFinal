@@ -338,11 +338,8 @@ var string;
 string= data.trim();
 		 if(string == 1)
         {
-
-	  $ionicPopup.alert({
-                            title: 'Info',
-                            template: 'Comentario Insertado'
-                        });
+$scope.Comentarios();
+	 
 		}
 	});
 
@@ -354,13 +351,15 @@ string= data.trim();
 $scope.Comentarios = function() {
       servicioApp.getComents($scope.model.image.id ).success(function(datosComs) {
             $scope.datosComs = datosComs;
+ }).finally(function() {
+            $scope.$broadcast('scroll.refreshComplete');
         });
         
     };
        
     $scope.Comentarios();
 
-
+ 
 })
 
 
