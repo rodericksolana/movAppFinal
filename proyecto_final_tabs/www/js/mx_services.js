@@ -125,6 +125,10 @@ angular.module('starter.services', [])
 	getComents: function(idPublicacion){
                 return $http.get(baseUrl+'select_coments.php?idMedia='+idPublicacion); 
             },
+	
+	eliminaP: function(id){
+                return $http.get(baseUrl+'delete_pub.php?id='+id); 
+            },
 
 
 insertCom: function(json) {

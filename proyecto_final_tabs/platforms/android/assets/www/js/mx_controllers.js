@@ -319,9 +319,22 @@ angular.module('starter.controllers', ['ngCordova'])
         $scope.model.voteIcon = Constants.IconNotVoted;
     });
 	
-$scope.carga = function()
+$scope.eliminaPub = function()
 {
-alert("Carga");
+
+  servicioApp.eliminaP($scope.model.image.id ).success(function(data) {
+	if(data == 1)
+{
+            $state.go('tab.account');
+
+}
+else
+{
+alert("Hubo un error");
+}
+        });
+        
+    
 
 };
 

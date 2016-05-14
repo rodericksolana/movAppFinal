@@ -55,7 +55,7 @@
         <div class="col col-10">
             <a ng-click="report()" class="button button-icon icon ion-ios-flag-outline"></a>
         </div>
-	<div ng-if="model.id == model.image.idPersona" ALIGN=right id= elimina class="button button-clear " ng-click="carga()"> Eliminar <span class="icon ion-ios-trash-outline"></span>
+	<div ng-if="model.id == model.image.idPersona" ALIGN=right id= elimina class="button button-clear " ng-click="eliminaPub()"> Eliminar <span class="icon ion-ios-trash-outline"></span>
 	</div>
     </div>
 
@@ -78,6 +78,17 @@
     <!-- lista de comentarios -->
 
 
+     <div class="list" ng-repeat="datosCom in datosComs" type="item-text-wrap" >
+         <div class="item item-avatar item-text-wrap">
+           <img ng-src="{{datosCom.imagen}}">
+           <a>{{datosCom.Usuario}}</a>
+           <h3>{{datosCom.texto}}</h3>
+           <p>{{datosCom.fecha}}</p>
+         </div>
+         
+     </div>
+
+<!--
  <ion-list show-Delete = "data.showDelete" show-Reorder = "data.showReorder">
             <ion-item class="item-avatar item-icon-right" ng-repeat="datosCom in datosComs" type="item-text-wrap" >
                 <img ng-src="{{datosCom.imagen}}">
@@ -86,10 +97,9 @@
 </h2>
  
 					  
-                <!-- <ion-delete-button class="ion-minus-circled" ng-click="delete(datosalumno);"> </ion-delete-button>  -->
-
             </ion-item>
         </ion-list>
+-->
     
   </ion-content>
 </ion-view>
