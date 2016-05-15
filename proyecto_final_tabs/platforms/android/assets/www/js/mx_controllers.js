@@ -334,8 +334,6 @@ alert("Hubo un error");
 }
         });
         
-    
-
 };
 
 
@@ -378,9 +376,12 @@ $scope.Comentarios = function() {
 
 
 .controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, 
-            DataShare, $cordovaCamera, $cordovaFileTransfer) {
+            DataShare, $cordovaCamera, $cordovaFileTransfer, $ionicHistory) {
 
 var imageURL;
+
+ $ionicHistory.clearCache();
+   $ionicHistory.clearHistory();
 
 /*Funcion para poner alertas con mensajes en pantalla*/
  $scope.showAlert = function(msg) {
@@ -519,10 +520,12 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
 
 .controller('AccountCtrl', function($scope, $stateParams, $http, $ionicModal,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
-            servicioApp, $state  ,$ionicPopup, DataShare) {
+            servicioApp, $state  ,$ionicPopup, DataShare, $window, $ionicHistory) {
 
 
  $scope.showDataIdMedia = function() {
+	$scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.user.intereses,"imagen":DataShare.user.imagen,"perfil":DataShare.user.perfil}];
+
       servicioApp.getIdMedia(DataShare.user.id).success(function(datosMedia) {
             $scope.datosMedia = datosMedia;
         }).finally(function() {
@@ -534,7 +537,6 @@ $scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/conte
 
     $scope.showDataIdMedia();
 
-$scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.user.intereses,"imagen":DataShare.user.imagen,"perfil":DataShare.user.perfil}];
 	
 
 /* Esto es lo q regresa el login y lo q pasa a ser DataShare.user.ELEMENTO
@@ -549,6 +551,28 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 		   
     };
 
+$scope.logOut=function ()
+{
+var confirmPopup = $ionicPopup.confirm({
+         title: 'Log Out',
+         template: '¿Estás seguro que quieres salir de tu cuenta?'
+       });
+
+confirmPopup.then(function(res) {
+         if(res) {
+document.getElementById("logOut").style.visibility="hidden"; 
+   $ionicHistory.clearCache();
+   $ionicHistory.clearHistory();
+		$state.go('login');
+            //$state.go('login', {}, {reload: true});
+	//$window.location.reload(true);
+	//location.reload();
+         } else {
+            console.log('No cerró sesión');
+         }
+       });
+
+};
 
 })//Cierre controlador Cuenta
 
@@ -557,6 +581,9 @@ $scope.datosPersona  =  [{"Usuario":DataShare.user.username,"Interes":DataShare.
 .controller('AccountDetailCtrl', function($scope,$stateParams,$ionicPopup,$ionicModal,$state,servicioApp, DataShare, $cordovaFileTransfer ){
 
     DataShare.searchAgain = true;
+
+
+$state.go($state.current, $stateParams, {reload: true, inherit: false});
   
  $scope.showDataMedia = function() {
       servicioApp.getMedia($stateParams.accountId).success(function(datosMedia) {

@@ -32,6 +32,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   $stateProvider
 
 .state('login', {
+	cache: false,
     url: '/login',
       
         templateUrl: "templates/login.html", 
@@ -52,6 +53,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   // setup an abstract state for the tabs directive
     .state('tab', {
+	cache: false,
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
@@ -121,6 +123,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
   
   .state('tab.account', {
+    cache: false,
     url: '/account',
     views: {
       'tab-account': {
@@ -142,6 +145,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   
 
   .state('tab.img-detail', {
+      cache: false,
       url: '/img/:imgId',
       views: {
         'tab-home': {

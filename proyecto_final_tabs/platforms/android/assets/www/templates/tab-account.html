@@ -1,4 +1,10 @@
 <ion-view view-title="Cuenta">
+<ion-nav-buttons side="right">
+         <button class="button button-dark icon-right ion-log-out" ng-click="logOut()" id="logOut">
+	Log Out
+          </button> 
+
+</ion-nav-buttons>
 <ion-content class="padding" ng-repeat="datosPersona in datosPersona">
  <ion-refresher
             pulling-text="Arrastre para actualizar..."
@@ -28,6 +34,8 @@
         </div>
     
 </div>
+
+
 
 <!--
 <ion-item class="row" ng-repeat="datosMedia in datosMedia" type="item-text-wrap">
