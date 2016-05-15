@@ -72,8 +72,8 @@
     <!-- area de comentario -->
     <div class="item item-icon-right" ng-show="model.showComment">
         <input type="text" id="imgDetailComment" class="comment_input padding" placeholder="Comentar" 
-        size="35" maxlength="102" ng-model="model.comment" ng-blur="comenta() ;model.showComment = false">
-        <a class="icon ion-chatbubble-working"></a>
+        size="35" ng-minlength="1" maxlength="102" ng-model="model.comment" >
+        <a class="icon ion-android-send" ng-disabled="!model.comment" ng-click="comenta() ;model.showComment = false"></a>
     </div>
     <!-- lista de comentarios -->
 

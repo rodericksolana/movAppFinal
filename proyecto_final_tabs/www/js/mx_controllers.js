@@ -127,8 +127,11 @@ angular.module('starter.controllers', ['ngCordova'])
             $state, $ionicHistory, DataShare, servicioApp, Constants) {
     $scope.showComment = function() {
         $scope.model.showComment = true;
+	document.getElementById("imgDetailComment").focus();
         var comment = document.getElementById("imgDetailComment");
         comment.click();
+	
+
     };
     
     $scope.model = {};
