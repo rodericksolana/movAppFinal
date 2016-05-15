@@ -322,53 +322,67 @@ angular.module('starter.controllers', ['ngCordova'])
 $scope.eliminaPub = function()
 {
 
-  servicioApp.eliminaP($scope.model.image.id ).success(function(data) {
-	if(data == 1)
-{
-            $state.go('tab.account');
+	var confirmPopup = $ionicPopup.confirm
+	({
+		 title: 'Log Out',
+		 template: '¿Desea eliminar la publicación?'
+	 });
 
-}
-else
-{
-alert("Hubo un error");
-}
-        });
-        
+		confirmPopup.then(function(res) {
+			 if(res) {
+			servicioApp.eliminaP($scope.model.image.id ).success(function(data) {
+			if(data == 1)
+		{
+			$ionicHistory.goBack();
+
+		}
+		else
+		{
+			alert("Hubo un error");
+		}
+			});
+
+		 } else {
+		    console.log('Cancel eliminaPub');
+			}
+		 
+		});
+       
 };
 
 
-$scope.comenta = function()
-{
+	$scope.comenta = function()
+	  {
 
- servicioApp.insertCom({
+		 servicioApp.insertCom({
                     idPersonas: DataShare.user.id,
                     idPublicacion: $scope.model.image.id,
                     texto: $scope.model.comment
-                }).success(function(data){
-var string;
-string= data.trim();
-		 if(string == 1)
-        {
-$scope.Comentarios();
-	 
-		}
-	});
+               		  }).success(function(data){
+					var string;
+					string= data.trim();
+						 if(string == 1)
+						{
+							$scope.Comentarios();
+				 
+						}
+				});	
 
 
 
-}; //Cierre de funcion comenta
-//$scope.carga();
+	  }; 
 
-$scope.Comentarios = function() {
-      servicioApp.getComents($scope.model.image.id ).success(function(datosComs) {
-            $scope.datosComs = datosComs;
- }).finally(function() {
-            $scope.$broadcast('scroll.refreshComplete');
-        });
+
+	$scope.Comentarios = function() {
+     	 servicioApp.getComents($scope.model.image.id ).success(function(datosComs) {
+          	  $scope.datosComs = datosComs;
+ 		}).finally(function() {
+        	    $scope.$broadcast('scroll.refreshComplete');
+      		  });
         
-    };
+  	  };
        
-    $scope.Comentarios();
+   		 $scope.Comentarios();
 
  
 })
@@ -378,14 +392,14 @@ $scope.Comentarios = function() {
 .controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, 
             DataShare, $cordovaCamera, $cordovaFileTransfer, $ionicHistory) {
 
-var imageURL;
+	var imageURL;
 
- $ionicHistory.clearCache();
-   $ionicHistory.clearHistory();
+ 	$ionicHistory.clearCache();
+    $ionicHistory.clearHistory();
 
-/*Funcion para poner alertas con mensajes en pantalla*/
- $scope.showAlert = function(msg) {
-      $ionicPopup.alert({
+	/*Funcion para poner alertas con mensajes en pantalla*/
+	 $scope.showAlert = function(msg) {
+		  $ionicPopup.alert({
           title: msg.title,
           template: msg.message,
           okText: 'Ok',
@@ -393,7 +407,7 @@ var imageURL;
       });
     };
 
-/*Funcion para logear*/
+	/*Funcion para logear*/
     $scope.login = function () {
         // DataShare.user = {id: 1, username: 'Tatum', perfil: 'user'};
         // $state.go('tab.home');
@@ -418,10 +432,10 @@ var imageURL;
 
 	$scope.datosPersona={}; //arreglo para los datos de las personas
 
-/*Funcion para registrar y subir la foto al servidor*/
+	/*Funcion para registrar y subir la foto al servidor*/
     $scope.registra = function ()  {
 
-$scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + $scope.datosPersona.username + "-" + $scope.datosPersona.password +".jpg";
+	$scope.datosPersona.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + $scope.datosPersona.username + "-" + $scope.datosPersona.password +".jpg";
 
 
 /*Comienza la parte para registrar al usuario*/
@@ -558,11 +572,11 @@ var confirmPopup = $ionicPopup.confirm({
          template: '¿Estás seguro que quieres salir de tu cuenta?'
        });
 
-confirmPopup.then(function(res) {
+	confirmPopup.then(function(res) {
          if(res) {
-document.getElementById("logOut").style.visibility="hidden"; 
-   $ionicHistory.clearCache();
-   $ionicHistory.clearHistory();
+	document.getElementById("logOut").style.visibility="hidden"; 
+  	 $ionicHistory.clearCache();
+  	 $ionicHistory.clearHistory();
 		$state.go('login');
             //$state.go('login', {}, {reload: true});
 	//$window.location.reload(true);
@@ -583,22 +597,20 @@ document.getElementById("logOut").style.visibility="hidden";
     DataShare.searchAgain = true;
 
 
-$state.go($state.current, $stateParams, {reload: true, inherit: false});
-  
- $scope.showDataMedia = function() {
-      servicioApp.getMedia($stateParams.accountId).success(function(datosMedia) {
-            $scope.datosMedia = datosMedia;
-        });
-        
-    };
-       
-    $scope.showDataMedia();
-    
-$scope.elimina = function($event){
-
-	alert(event.target.id);
-document.getElementById("elimina").style.visibility="hidden"; 
-};
+		$state.go($state.current, $stateParams, {reload: true, inherit: false});
+		  
+		$scope.showDataMedia = function() {
+			  servicioApp.getMedia($stateParams.accountId).success(function(datosMedia) {
+				    $scope.datosMedia = datosMedia;
+					});	
+			};
+			   
+		$scope.showDataMedia();
+		
+		$scope.elimina = function($event){
+			alert(event.target.id);
+			document.getElementById("elimina").style.visibility="hidden"; 
+		};
 
 
    	
