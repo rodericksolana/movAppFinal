@@ -74,6 +74,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
   
   .state('tab.report', {
+    cache: false,
     url: '/report',
     views: {
       'tab-report': {

@@ -1,10 +1,16 @@
 angular.module('starter.controllers', ['ngCordova'])
 
+/**
+ * Este es el controlador del estado abstracto de las pestañas.
+ */
 .controller('TabCtrl', function($scope, DataShare, $state) {
     $scope.model = {};
     $scope.model.perfil = DataShare.user.perfil;
 })
 
+/**
+ * Este es el controlador de la pantalla de incio
+ */
 .controller('HomeCtrl', function($scope, $http, $ionicPopup, DataShare, $state,
             servicioApp) {
                 
@@ -18,7 +24,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
     };
     
-
+ // carga las imagenes desde la base de datos
  $scope.showDataMain = function() {
       servicioApp.getMediaMain().success(function(datosMediaMain) {
             $scope.datosMediaMain = datosMediaMain;
@@ -30,6 +36,8 @@ angular.module('starter.controllers', ['ngCordova'])
 
     $scope.showDataMain();
 
+ // al dar clic sobre una imagen esta función selecciona el objeto adecuado
+ // y llama al estado adecuado.
  $scope.selectImg = function(datosMediaMains) {
         DataShare.selectedImg = datosMediaMains;
         $state.go('tab.home-detail');
@@ -38,22 +46,29 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
+/**
+ * Controlador para la pantalla de reportes
+ */
 .controller('ReportCtrl', function($scope, servicioApp, DataShare, $state) {
     $scope.model = {};
     $scope.model.reports = [];
     
+    // carga los reportes desde la base de datos
     $scope.showReports = function() {
         servicioApp.reporteSelect({}).then(
         function(resp) {
             if (resp.data.respCode === 1) {
                 $scope.model.reports = resp.data.result;
             } 
+            $scope.$broadcast('scroll.refreshComplete');
         }, function(error) {
             console.log(error);
             alert("Hubo un error con la comunicación al servidor. Intente de nuevo.");
         });
     }
     
+     // al dar clic sobre una imagen esta función selecciona el objeto adecuado
+    // y llama al estado adecuado.
     $scope.selectImg = function(image) {
         DataShare.selectedImg = {ubicacion: null,
                                  idPersona: image.idPersonas,
@@ -67,6 +82,9 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.showReports();
 })
 
+/**
+ * Controlador de la pantalla de Búsqueda
+ */
 .controller('SearchCtrl', function($scope, servicioApp, DataShare, $state) {
     var startIndex = 0;
     var queryResults = [];
@@ -87,9 +105,10 @@ angular.module('starter.controllers', ['ngCordova'])
         });
     };
     
+    // función para filtrar los resultados y mostrar los que coinciden
     $scope.filter = function() {
         var query = $scope.model.query.toLowerCase();
-        
+        // Solo busca si se han introducido dos o más carácteres
         if (query.length >= 2) {
             if (DataShare.searchAgain) {
                 DataShare.searchAgain = false;
@@ -114,6 +133,8 @@ angular.module('starter.controllers', ['ngCordova'])
         }
     };
     
+    // al dar clic sobre una imagen esta función selecciona el objeto adecuado
+    // y llama al estado adecuado.
     $scope.selectImg = function(image) {
         DataShare.selectedImg = image;
         $state.go('tab.search-detail');
@@ -122,16 +143,17 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.search();
 })
 
-
+/**
+ * Controlador para la vista de los detalles de imagen.
+ */
 .controller('ImgDetailCtrl', function($scope, $stateParams, $ionicModal, $ionicPopup, 
             $state, $ionicHistory, DataShare, servicioApp, Constants) {
+    // función que muestra el cuadro de comentarios.
     $scope.showComment = function() {
         $scope.model.showComment = true;
-	document.getElementById("imgDetailComment").focus();
+        document.getElementById("imgDetailComment").focus();
         var comment = document.getElementById("imgDetailComment");
         comment.click();
-	
-
     };
     
     $scope.model = {};
@@ -144,6 +166,7 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.model.voteIcon = '';
     $scope.model.totalVotes = '';
     
+    // checa si la imagen tiene ubicación para mostrar el botón de ubicaicón
     if ($scope.model.image.ubicacion != null && $scope.model.image.ubicacion != ''
         && $scope.model.image.ubicacion != 'undefined,undefined') {
         $scope.model.showLoc = true;
@@ -168,6 +191,7 @@ angular.module('starter.controllers', ['ngCordova'])
         alert("Hubo un error al contactar al servidor, intente de nuevo.");
     });
     
+    // función para mostrar el modal de ubicacion.
     $scope.Geolocalizar = function () { $ionicModal.fromTemplateUrl('templates/mapa_modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -177,6 +201,7 @@ angular.module('starter.controllers', ['ngCordova'])
     });
     };
     
+    // función para realizar el reporte de la imagen
     $scope.report = function() {
        var confirmPopup = $ionicPopup.confirm({
          title: 'Reportar',
@@ -206,6 +231,7 @@ angular.module('starter.controllers', ['ngCordova'])
        });
      };
      
+    // función para realizar un "me gusta"
     $scope.vote = function() {
         if ($scope.model.voteIcon === Constants.IconNotVoted) {
             servicioApp.votoInsert({idPublicacion: $scope.model.image.id, 
@@ -238,6 +264,7 @@ angular.module('starter.controllers', ['ngCordova'])
         }
     };
     
+    // función para elimiar el reporte realizado para una imagen.
     $scope.quitarReporte = function() {
         var confirmPopup = $ionicPopup.confirm({
             title: 'Quitar Reporte',
@@ -270,6 +297,7 @@ angular.module('starter.controllers', ['ngCordova'])
         })
     };
     
+    // Elimina la imagen que ha sido reportado con su reporte correspondiente.
     $scope.eliminarImagenReportada = function() {
         var confirmPopup = $ionicPopup.confirm({
             title: 'Eliminar Imagen',
@@ -303,7 +331,7 @@ angular.module('starter.controllers', ['ngCordova'])
         });
     };
     
-    
+    // Esta función checa si la imagen tiene "me gusta" y los muestra en la pantalla.
     servicioApp.votoSelect({idPublicacion: $scope.model.image.id, 
                             idPersonas: DataShare.user.id}).then(
     function(resp) {
@@ -322,6 +350,7 @@ angular.module('starter.controllers', ['ngCordova'])
         $scope.model.voteIcon = Constants.IconNotVoted;
     });
 	
+    // Elimina una publicación. 
 $scope.eliminaPub = function()
 {
 
@@ -353,7 +382,7 @@ $scope.eliminaPub = function()
        
 };
 
-
+    // guarda un comentario en la base de datos y lo muestra en la pantalla.
 	$scope.comenta = function()
 	  {
 
@@ -375,7 +404,8 @@ $scope.eliminaPub = function()
 
 	  }; 
 
-
+    // Actualiza los comentarios en la vista de detalles de la imagen.
+    // esta función se llama cuando se hace scroll down.
 	$scope.Comentarios = function() {
      	 servicioApp.getComents($scope.model.image.id ).success(function(datosComs) {
           	  $scope.datosComs = datosComs;
@@ -391,7 +421,9 @@ $scope.eliminaPub = function()
 })
 
 
-
+/** 
+ * Controlador para el inicio de sesión y el registro de usuarios nuevos.
+ */
 .controller('LoginCtrl', function ($scope, $state, servicioApp, $ionicPopup, 
             DataShare, $cordovaCamera, $cordovaFileTransfer, $ionicHistory) {
 
@@ -620,20 +652,9 @@ var confirmPopup = $ionicPopup.confirm({
 	
 })
 
-
-
-
-
-
-.controller('AppCtrl', function ($scope, $state)  {
-
-	/*$scope.validar= function() {
-	//aqui se hacen las validaciones
-	$state.go('sidemenu.home');
-	}*/
-
-})
-
+/**
+ * Este controlador es el relacionado con la pantalla de vista
+ */
 .controller('CameraCtrl', function($scope, $stateParams, $http, $ionicModal, $ionicPopup,
             $cordovaImagePicker, $cordovaCamera, $cordovaFileTransfer, DataShare,
             $state, servicioApp) {
@@ -794,6 +815,10 @@ var confirmPopup = $ionicPopup.confirm({
   
 })
 
+/**
+ * Directiva para crear una vista de Google Maps que se pueda mover y poner 
+ * marquers.
+ */
 .directive('pddmMapa', function ($ionicLoading) {
     return {
         restrict: 'E',
@@ -889,6 +914,10 @@ var confirmPopup = $ionicPopup.confirm({
     }
 })
 
+/**
+ * Directiva para crear una vista de Google Maps que no permite la creación de marquers.
+ * Esta directiva se usa en la pantalla de Detalles de la imagen.
+ */
 .directive('pddmLoc', function ($ionicLoading) {
     return {
         restrict: 'E',
