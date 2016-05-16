@@ -89,8 +89,8 @@ angular.module('starter.controllers', ['ngCordova'])
     
     $scope.filter = function() {
         var query = $scope.model.query.toLowerCase();
-        
-        if (query.length >= 3) {
+        // Solo busca si se han introducido dos o más carácteres
+        if (query.length >= 2) {
             if (DataShare.searchAgain) {
                 DataShare.searchAgain = false;
                 startIndex = 0;
@@ -327,7 +327,7 @@ $scope.eliminaPub = function()
 
 	var confirmPopup = $ionicPopup.confirm
 	({
-		 title: 'Log Out',
+		 title: 'Confirma',
 		 template: '¿Desea eliminar la publicación?'
 	 });
 
