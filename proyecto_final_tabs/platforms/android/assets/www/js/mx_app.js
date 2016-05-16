@@ -115,6 +115,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     })
 
   .state('tab.cam', {
+    cache: false,
     url: '/cam',
     views: {
       'tab-cam': {
@@ -141,6 +142,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         'tab-account': {
           templateUrl: 'templates/img-detail.html',
           controller: 'ImgDetailCtrl'
+        }
+      }
+    })
+    
+    .state('tab.account-change', {
+      url: '/account-change',
+      views: {
+        'tab-account': {
+          templateUrl: 'templates/perfil_pic.html',
+          controller: 'CameraCtrl'
         }
       }
     })

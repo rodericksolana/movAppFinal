@@ -28,6 +28,14 @@ angular.module('starter.services', [])
             });
         },
         
+        changePic: function(json) {
+            return $http.post(baseUrl + 'perfil_change.php', json, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                }
+            })
+        }, 
+        
         imgInsert: function(json) {
             return $http.post(baseUrl + 'img_insert.php', json, {
                 headers: {

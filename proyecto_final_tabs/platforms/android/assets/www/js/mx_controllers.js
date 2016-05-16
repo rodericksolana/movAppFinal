@@ -805,6 +805,47 @@ var confirmPopup = $ionicPopup.confirm({
         });
     };
     
+    $scope.changePic = function() {
+        var server_url = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/" +
+            "final/.Proyecto/Servicios/file_upload.php";
+        var filename = "u" + DataShare.user.id + "-" + Date.now().toString() + ".jpg";
+          
+        var options_up = {
+              fileKey: "file",
+              fileName: filename,
+              chunkedMode: false,
+              mimeType: "image/jpg",
+              params : {'directory':'upload', 'fileName':filename}
+          };
+        $cordovaFileTransfer.upload(server_url, $scope.model.image, options_up).then(function(result) {
+            console.log("SUCCESS: " + JSON.stringify(result.response));
+            if (result.response.trim() !== "File successfully uploaded!") {
+                alert("Hubo un error al subir la imagen.");
+                return false;
+            } 
+            
+            var img_path = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + filename;
+            servicioApp.changePic({"idPersonas": DataShare.user.id,
+                                "imagen": img_path}).then(
+            function(resp) {
+                //$scope.showAlert({title: "Info", message: "Datos guardados exitosamente."});	
+                alert("Datos guardados exitosamente.");
+                DataShare.user.imagen = "http://ubiquitous.csf.itesm.mx/~pddm-1129839/content/final/.Proyecto/Servicios/upload/" + filename;
+                $scope.clearView();
+                $state.go('tab.account');
+            }, function(error) {
+                console.log(error);
+                alert("Hubo un error con la comunicación al servidor. Intente de nuevo.");
+            });
+            
+        }, function(err) {
+            console.log("ERROR: " + JSON.stringify(err));
+            alert("It was an error uplading the file");
+        }, function (progress) {
+            // constant progress updates
+        });
+    };
+    
     // limpia la pantalla y restablece los valores predeterminados
     $scope.clearView = function() {
         $scope.model.image = '';
